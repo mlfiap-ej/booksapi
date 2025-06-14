@@ -1,0 +1,35 @@
+{
+    "name": "python ML env",
+    "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile",
+        "args": {}        
+    },
+    "containerEnv": {
+        "POETRY_VIRTUALENVS_IN_PROJECT": "1"
+    },
+    "postAttachCommand": "cd /workspaces/devcontainer && poetry sync && export PYTHONPATH=`poetry env info -p`",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.debugpy",
+                "zeshuaro.vscode-python-poetry",
+                "humao.rest-client",
+                "charliermarsh.ruff",
+                "tamasfe.even-better-toml"
+
+            ],
+            "settings": {
+                "[python]": {
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll": "explicit",
+                        "source.organizeImports": "explicit"
+                    },
+                    "editor.defaultFormatter": "charliermarsh.ruff"
+                }
+            }
+        }
+    }
+}
