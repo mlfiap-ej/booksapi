@@ -5,10 +5,7 @@
         "dockerfile": "Dockerfile",
         "args": {}        
     },
-    "containerEnv": {
-        "POETRY_VIRTUALENVS_IN_PROJECT": "1"
-    },
-    "postAttachCommand": "cd /workspaces/devcontainer && poetry sync && export PYTHONPATH=`poetry env info -p`",
+    "postAttachCommand": ".devcontainer/post.sh",
     "customizations": {
         "vscode": {
             "extensions": [
