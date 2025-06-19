@@ -2,3 +2,6 @@
 __pycache__
 .vscode/settings.json
 .idea
+
+mockdata/*
+!mockdata/importador.py

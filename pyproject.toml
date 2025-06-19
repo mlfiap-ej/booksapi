@@ -19,6 +19,7 @@ packages = [{include = "fiap-ml", from = "src"}]
 [tool.poetry.group.dev.dependencies]
 debugpy = "^1.8.14"
 pytest = "^8.4.0"
+pandas = "^2.3.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
