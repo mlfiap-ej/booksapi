@@ -1,7 +1,7 @@
 import os
 from typing import List
 
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, select, text
 from sqlalchemy.orm import Session
 
 from data.model.bookmodel import BookModel
@@ -27,7 +27,7 @@ class CsvDataSource:
         data_to_return = []
         for row in rows:
             data_to_return.append(
-                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price)
+                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating)
             )
         return data_to_return
 
@@ -37,7 +37,7 @@ class CsvDataSource:
         row = s.execute(stmt).scalars().first()
         if not row:
             return None
-        return Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price)
+        return Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating)
 
     def search(self, page: int = 1, **kwargs) -> List[Book]:
 
@@ -54,7 +54,7 @@ class CsvDataSource:
         data_to_return = []
         for row in rows:
             data_to_return.append(
-                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price)
+                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating)
             )
         return data_to_return
 
@@ -70,8 +70,3 @@ class CsvDataSource:
         stmt = select(1)
         row = s.execute(stmt).scalars().first()
         return True
-
-
-def build(path: str, type: str) -> CsvDataSource:
-    if type == 'csv':
-        return CsvDataSource(path)

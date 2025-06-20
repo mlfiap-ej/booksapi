@@ -10,8 +10,9 @@ class Book:
     category: str
     stock: int
     price: Decimal
+    rating: int
     
-    def __init__(self, id: str, author: str, year: int, title: str, category: str, stock: int, price: Decimal | float):
+    def __init__(self, id: str, author: str, year: int, title: str, category: str, stock: int, price: Decimal | float, rating: int):
         self.id = id
         self.author = author
         self.year = year
@@ -22,3 +23,4 @@ class Book:
             self.price = Decimal(str(price))
         else:
             self.price = price
+        self.rating = rating
