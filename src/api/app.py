@@ -2,12 +2,16 @@ import locale
 from typing import Annotated, List
 
 from fastapi import FastAPI, Query, HTTPException
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 import api.filters as filters
 import api.models as models
 from data.csvdatads import CsvAnalysisDataSource
 from data.csvds import CsvDataSource
 from model.book import Book
+from api.security import check_jwt
+
 
 description = """
 API de acesso a dados de livros, baseada em arquivo csv, originado em scraping.
@@ -22,6 +26,28 @@ csv_ds = CsvDataSource('mockdata/books.csv')
 csv_analysis_ds = CsvAnalysisDataSource('mockdata/books.csv')
 
 app = FastAPI(root_path="/api/v1", description=description)
+
+@app.middleware("http")
+async def middleware(request: Request, call_next):
+    print(request.url.path)
+
+    if request.url.path.startswith("/api/v1/auth"):
+        response = await call_next(request)
+        return response
+
+    if request.headers.get('Authorization') is None:
+        return JSONResponse({"message": "No authorization header"}, status_code=401)
+
+    if not request.headers.get('Authorization').startswith("Bearer "):
+        return JSONResponse({"message": "Invalid authorization header (1)"}, status_code=401)
+
+    auth_token = request.headers.get('Authorization').replace("Bearer ", "")
+    if not check_jwt(auth_token):
+        return JSONResponse({"message": "Invalid authorization header (2)"}, status_code=401)
+
+    response = await call_next(request)
+    return response
+
 @app.get("/books", description="Busca todos os livros")
 async def all_books(filter_query: Annotated[filters.PageFilterParameters, Query()]) -> models.ListReturn:
     r = csv_ds.get_all_books(page=filter_query.page)
@@ -92,6 +118,15 @@ async def categories_overview() -> dict:
             'precos': prices_data[category]
         }
     return r
+
+@app.post("/auth")
+async def auth(userlogin: models.Userlogin):
+    from api.security import check_password, emit_jwt
+    try:
+        j = emit_jwt(userlogin.username, userlogin.password)
+        return j
+    except Exception as e:
+        raise HTTPException(status_code=401)
 
 
 def get_app():
