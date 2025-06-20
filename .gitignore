@@ -4,4 +4,4 @@ __pycache__
 .idea
 
 mockdata/*
-!mockdata/importador_parquet.py
+!mockdata/.gitkeep
