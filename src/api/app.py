@@ -100,6 +100,7 @@ async def health() -> models.HealthReturn:
 
 @app.get("/stats/overview")
 async def overview() -> dict:
+    locale.setlocale(locale.LC_MONETARY, "en_GB")
     preco_medio_formatado = locale.currency( csv_analysis_ds.prices_average(), grouping=True)
     return {
         "total_livros": csv_analysis_ds.books_count(),

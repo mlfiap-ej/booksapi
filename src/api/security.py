@@ -7,7 +7,6 @@ userds = UserDataSource("./mockdata/users.csv")
 secret = "my_super_secret_secret"
 
 def check_password(user: str, password: str) -> bool:
-    userds.listusers()
     return userds.checkpass(user, password)
 
 def emit_jwt(user: str, password: str) -> str:
@@ -24,6 +23,8 @@ def emit_jwt(user: str, password: str) -> str:
 
 
 def check_jwt(token: str) -> bool:
+    print(token)
+
     try:
         payload = jwt.decode(token, secret, algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
