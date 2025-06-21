@@ -1,0 +1,366 @@
+{
+	"info": {
+		"_postman_id": "fb4644cb-94b0-4012-afac-488424bd1be7",
+		"name": "BooksML",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46076503",
+		"_collection_link": "https://a-3682923.postman.co/workspace/a's-Workspace~7b3c12f8-bfb5-409f-8724-b41a608c393a/collection/46076503-fb4644cb-94b0-4012-afac-488424bd1be7?action=share&source=collection_link&creator=46076503"
+	},
+	"item": [
+		{
+			"name": "CreateToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.response.text())",
+							"pm.collectionVariables.set(\"token\", pm.response.text().replaceAll('\"', ''))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"erick\",\n    \"password\": \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}{{base}}/auth",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Books",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(pm.collectionVariables.get(\"token\"))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/books",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SingleBook",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}{{base}}/books/ZYL8GcCIs9EE36eCeFAD",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"books",
+						"ZYL8GcCIs9EE36eCeFAD"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Categories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/categories",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book Search",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/books/search?category=stem",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"books",
+						"search"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Defense chance",
+							"disabled": true
+						},
+						{
+							"key": "category",
+							"value": "stem"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/health",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Overview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/stats/overview",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"stats",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Categories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/stats/categories",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"stats",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book Top Rated",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/books/top-rated",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"books",
+						"top-rated"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book Top Rated Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}/books/price-range?min=10&max=15",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"path": [
+						"books",
+						"price-range"
+					],
+					"query": [
+						{
+							"key": "min",
+							"value": "10"
+						},
+						{
+							"key": "max",
+							"value": "15"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
