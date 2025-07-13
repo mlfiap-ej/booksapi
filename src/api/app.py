@@ -27,26 +27,26 @@ csv_analysis_ds = CsvAnalysisDataSource('mockdata/books.csv')
 
 app = FastAPI(root_path="/api/v1", description=description)
 
-@app.middleware("http")
-async def middleware(request: Request, call_next):
-    print(request.url.path)
+# @app.middleware("http")
+# async def middleware(request: Request, call_next):
+#     print(request.url.path)
 
-    if request.url.path.startswith("/api/v1/auth"):
-        response = await call_next(request)
-        return response
+#     if request.url.path.startswith("/api/v1/auth"):
+#         response = await call_next(request)
+#         return response
 
-    if request.headers.get('Authorization') is None:
-        return JSONResponse({"message": "No authorization header"}, status_code=401)
+#     if request.headers.get('Authorization') is None:
+#         return JSONResponse({"message": "No authorization header"}, status_code=401)
 
-    if not request.headers.get('Authorization').startswith("Bearer "):
-        return JSONResponse({"message": "Invalid authorization header (1)"}, status_code=401)
+#     if not request.headers.get('Authorization').startswith("Bearer "):
+#         return JSONResponse({"message": "Invalid authorization header (1)"}, status_code=401)
 
-    auth_token = request.headers.get('Authorization').replace("Bearer ", "")
-    if not check_jwt(auth_token):
-        return JSONResponse({"message": "Invalid authorization header (2)"}, status_code=401)
+#     auth_token = request.headers.get('Authorization').replace("Bearer ", "")
+#     if not check_jwt(auth_token):
+#         return JSONResponse({"message": "Invalid authorization header (2)"}, status_code=401)
 
-    response = await call_next(request)
-    return response
+#     response = await call_next(request)
+#     return response
 
 @app.get("/books", description="Busca todos os livros")
 async def all_books(filter_query: Annotated[filters.PageFilterParameters, Query()]) -> models.ListReturn:
