@@ -253,6 +253,9 @@ poe run
 ## 🔌 API Endpoints
 
 ### Autenticação
+ 
+Para obter o token de autenticação, registre o usuário e senha no arquivo `mockdata/users.csv` e faça um request no endpoint abaixo. 
+
 ```bash
 POST /api/v1/auth
 Content-Type: application/json
@@ -262,6 +265,8 @@ Content-Type: application/json
   "password": "senha"
 }
 ```
+
+Com o retorno dessa request, use o token (como cabeçalho `Authorization: Bearer`) para efetuar as chamadas subsequentes
 
 ### Endpoints Protegidos
 Todos os endpoints (exceto `/auth`) requerem token JWT no header:
