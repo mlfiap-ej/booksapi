@@ -27,7 +27,7 @@ class CsvDataSource:
         data_to_return = []
         for row in rows:
             data_to_return.append(
-                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating)
+                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating, row.image)
             )
         return data_to_return
 
@@ -37,7 +37,7 @@ class CsvDataSource:
         row = s.execute(stmt).scalars().first()
         if not row:
             return None
-        return Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating)
+        return Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating, row.image)
 
     def search(self, page: int = 1, **kwargs) -> List[Book]:
 
@@ -54,7 +54,7 @@ class CsvDataSource:
         data_to_return = []
         for row in rows:
             data_to_return.append(
-                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating)
+                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating, row.image)
             )
         return data_to_return
 

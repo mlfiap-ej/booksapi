@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from decimal import Decimal, getcontext, setcontext
+from decimal import Decimal
+
 
 @dataclass
 class Book:
@@ -11,8 +12,9 @@ class Book:
     stock: int
     price: Decimal
     rating: int
-    
-    def __init__(self, id: str, author: str, year: int, title: str, category: str, stock: int, price: Decimal | float, rating: int):
+    image: str
+
+    def __init__(self,id: str,author: str,year: int,title: str,category: str,stock: int,price: Decimal | float,rating: int,image: str = ""):
         self.id = id
         self.author = author
         self.year = year
@@ -24,3 +26,4 @@ class Book:
         else:
             self.price = price
         self.rating = rating
+        self.image = image
