@@ -16,7 +16,8 @@ class BookModel(Base):
     stock: Mapped[int] = mapped_column(Integer)
     price: Mapped[float] = mapped_column(Float)
     rating: Mapped[int] = mapped_column(Integer)
+    image: Mapped[str] = mapped_column(String)
 
     def __repr__(self):
         return "<BookModel {} {} {} {} {} {} {} {}>".format(
-            self.id, self.author, self.year, self.title, self.category, self.stock, self.price, self.rating)
+            self.id, self.author, self.year, self.title, self.category, self.stock, self.price, self.rating, self.image)
