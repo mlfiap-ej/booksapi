@@ -4,7 +4,9 @@ from typing import List
 from sqlalchemy import create_engine, select, text
 from sqlalchemy.orm import Session
 
-from data.model.bookmodel import BookModel
+from data.model.bookmodel import BookModel	
+from data.model.booktestmodel import BookTestModel
+from data.model.booktrainmodel import BookTrainModel
 from model.book import Book
 
 from decouple import config
@@ -70,3 +72,25 @@ class CsvDataSource:
         stmt = select(1)
         row = s.execute(stmt).scalars().first()
         return True
+
+    def get_all_test_books(self) -> List[Book]:
+        s = self._get_session()
+        stmt = select(BookTestModel)
+        rows = s.scalars(stmt).fetchall()
+        data_to_return = []
+        for row in rows:
+            data_to_return.append(
+                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating, row.image)
+            )
+        return data_to_return
+
+    def get_all_train_books(self) -> List[Book]:
+        s = self._get_session()
+        stmt = select(BookTrainModel)
+        rows = s.scalars(stmt).fetchall()
+        data_to_return = []
+        for row in rows:
+            data_to_return.append(
+                Book(row.id, row.author, row.year, row.title, row.category, row.stock, row.price, row.rating, row.image)
+            )
+        return data_to_return

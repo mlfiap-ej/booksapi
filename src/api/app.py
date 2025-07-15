@@ -2,6 +2,8 @@ import locale
 from typing import Annotated, List
 
 from fastapi import FastAPI, Query, HTTPException
+import pandas as pd
+from sklearn.model_selection import train_test_split
 
 import api.filters as filters
 import api.models as models
@@ -24,6 +26,8 @@ API de acesso a dados de livros, baseada em arquivo csv, originado em scraping.
 """
 
 csv_ds = CsvDataSource("mockdata/books.csv")
+train_csv_ds = CsvDataSource("mockdata/books_train.csv")
+test_csv_ds = CsvDataSource("mockdata/books_test.csv")
 csv_analysis_ds = CsvAnalysisDataSource("mockdata/books.csv")
 
 app = FastAPI(root_path="/api/v1", description=description)
@@ -150,6 +154,15 @@ async def categories_overview() -> dict:
         }
     return r
 
+@app.get("/ml/features")
+async def ml_features() -> models.ListReturn:
+    r = test_csv_ds.get_all_test_books()
+    return models.ListReturn(data=r, length=len(r))
+
+@app.get("/ml/training-data")
+async def ml_training_data() -> models.ListReturn:
+    r = train_csv_ds.get_all_train_books()
+    return models.ListReturn(data=r, length=len(r))
 
 @app.post("/auth")
 async def auth(userlogin: models.Userlogin):

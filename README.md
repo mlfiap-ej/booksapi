@@ -345,7 +345,7 @@ Este projeto é parte do curso FIAP de Machine Learning.
 - [x] API RESTful Funcional
 	- [x] Endpoints Core
 	- [x] Endpoints de Insights
-	- [ ] Doc Swagger
+	- [x] Doc Swagger
 - [] Realizar o deploy da aplicação em Heroku ou Vercel
 - [] Plano Arquitetural
 - [] Vídeo de Apresentação (3-12 minutos)

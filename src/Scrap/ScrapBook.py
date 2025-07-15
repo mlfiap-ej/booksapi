@@ -1,4 +1,6 @@
 import csv
+
+from sklearn.model_selection import train_test_split
 from Scrap.Scrap import Scrap
 from bs4 import BeautifulSoup, Tag
 from model.book import Book
@@ -37,7 +39,10 @@ class ScrapBook(Scrap):
             book_url_index += 1
             print("Scrape - Read Book Info " + str(book_url_index) + " - " + book_url)
         
-        self.save_all_books_info_to_csv(all_books_info)
+        train, test = train_test_split(all_books_info, test_size=0.2, random_state=42)
+        self.save_books_info_to_csv(all_books_info, "books")
+        self.save_books_info_to_csv(train, "books_train")
+        self.save_books_info_to_csv(test, "books_test")
 
     def get_book_info(self, book_url: str) -> Optional[Book]:
         """Get information for a single book from its URL.
@@ -185,19 +190,19 @@ class ScrapBook(Scrap):
         return book
 
   
-    def save_all_books_info_to_csv(self, all_books_info: list[Book]):
+    def save_books_info_to_csv(self, books_info: list[Book], filename: str):
       """
       Save all books information to a CSV file.
       Args:
         all_books_info: List of Book objects to save to CSV
       """    
       print("--------------------------------")
-      print("Scrape - Saving all Books Info to CSV - " + str(len(all_books_info)))
+      print("Scrape - Saving all Books Info to CSV - " + str(len(books_info)))
       print("--------------------------------")
-      with open("mockdata/books.csv", "w") as file:
+      with open("mockdata/"+filename+".csv", "w") as file:
         writer = csv.writer(file,quoting=csv.QUOTE_NONNUMERIC)
         writer.writerow(["id", "author", "year", "title", "category", "stock", "price", "rating", "image"])
-        for book in all_books_info:
+        for book in books_info:
           writer.writerow([book.id, book.author, book.year, book.title, book.category, book.stock, book.price, book.rating, book.image])
 
     def get_number_from_string(self, string: str) -> int:
