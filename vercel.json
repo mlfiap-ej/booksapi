@@ -2,7 +2,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "webapi/main.py"
+      "dest": "src/webapi/main.py"
     }
   ]
 }
