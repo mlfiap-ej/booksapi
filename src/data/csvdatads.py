@@ -6,6 +6,7 @@ import pandas as pd
 
 from decimal import Decimal
 
+
 class CsvAnalysisDataSource:
     def __init__(self, path):
         self.filepath = os.path.join(os.getcwd(), path)

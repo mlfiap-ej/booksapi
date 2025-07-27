@@ -1,8 +1,8 @@
 # import all libraries
 from datetime import datetime
 
-from Scrap.ScrapMainPage import ScrapMainPage
-from Scrap.ScrapBook import ScrapBook
+from data_scrape.Scrap.ScrapMainPage import ScrapMainPage
+from data_scrape.Scrap.ScrapBook import ScrapBook
 
 main_url = "https://books.toscrape.com/"
 print("Start the Scrape - " + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
