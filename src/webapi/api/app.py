@@ -83,6 +83,11 @@ async def top_rated_books(
     books_ids = csv_analysis_ds.books_best_rated(filter_query.limit)
     if books_ids is None:
         return []
+
+
+
+    if not filter_query or len(books_ids) > 10:
+        books_ids = books_ids[:10]
     books = [csv_ds.get_book(id) for id in books_ids]
     return books
 
@@ -94,8 +99,10 @@ async def books_by_price_range(
     """
     Retorna uma lista de livros filtrados por faixa de preço e quantidade.
     """
+    limit = filter_query.limit if filter_query.limit > 0 else 10
+
     books_ids = csv_analysis_ds.books_filtered_by_price(
-        min=filter_query.min, max=filter_query.max, qty=filter_query.limit
+        min=filter_query.min, max=filter_query.max, qty=limit
     )
 
     if books_ids is None:
@@ -155,13 +162,13 @@ async def overview() -> dict:
     """
     Retorna um panorama de estatísticas: total de livros, preço médio e distribuição de avaliações.
     """
-    locale.setlocale(locale.LC_MONETARY, "en_GB")
-    preco_medio_formatado = locale.currency(
-        csv_analysis_ds.prices_average(), grouping=True
-    )
+    # locale.setlocale(locale.LC_MONETARY, "en_GB")
+    # preco_medio_formatado = locale.currency(
+    #     csv_analysis_ds.prices_average(), grouping=True
+    # )
     return {
         "total_livros": csv_analysis_ds.books_count(),
-        "preco_medio": preco_medio_formatado,
+        "preco_medio": f"{csv_analysis_ds.prices_average():.5f}",
         "distribuicao_ratings": csv_analysis_ds.rating_distribution(),
     }
 
