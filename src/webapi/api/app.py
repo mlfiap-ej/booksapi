@@ -5,13 +5,13 @@ from fastapi import FastAPI, Query, HTTPException
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-import api.filters as filters
-import api.models as models
+import webapi.api.filters as filters
+import webapi.api.models as models
 from data.csvdatads import CsvAnalysisDataSource
 from data.csvds import CsvDataSource
 from model.book import Book
 
-from api.security import check_jwt
+from webapi.api.security import check_jwt
 from starlette.responses import JSONResponse
 from starlette.requests import Request
 

@@ -33,7 +33,7 @@ O sistema é dividido em três camadas principais:
 
 ## 📚 Classes e Componentes
 
-### 🕷️ Módulo de Scraping (`src/Scrap/`)
+### 🕷️ Módulo de Scraping (`src/data_scrape/Scrap/`)
 
 #### `Scrap` (Classe Base)
 ```python
@@ -160,7 +160,7 @@ class BookModel(Base):
 - **Propósito**: Modelo ORM para acesso ao banco DuckDB
 - **Funcionalidades**: Mapeamento automático entre CSV e objetos Python
 
-### 🔐 Módulo de API (`src/api/`)
+### 🔐 Módulo de API (`src/webapi/api/`)
 
 #### `app.py` (FastAPI Application)
 ```python
@@ -220,6 +220,7 @@ PAGE_SIZE=10
 ### Pré-requisitos
 - Python >= 3.12
 - Poetry (gerenciador de dependências)
+- Poe (task runner para pyproject - https://poethepoet.natn.io/index.html)
 
 ## 🚀 Instalação
 

@@ -27,12 +27,12 @@ class ScrapMainPage(Scrap):
 
 	def get_all_books(self, page: int) -> list[str]:
 		"""
-    Get all books URL from the main page.
-    Args:
-        page: The page number to scrape
-    Returns:
-        A list of all books URL from the main page
-    """
+		Get all books URL from the main page.
+		Args:
+			page: The page number to scrape
+		Returns:
+			A list of all books URL from the main page
+		"""
 		url = self.main_url + "catalogue/page-" + str(page) + ".html"
 		content = self.get_page_content(url)		
 
