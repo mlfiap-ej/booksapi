@@ -1,22 +1,17 @@
 import locale
 from typing import Annotated, List
 
-from fastapi import FastAPI, Query, HTTPException
-import pandas as pd
-from sklearn.model_selection import train_test_split
+from fastapi import FastAPI, HTTPException, Query
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
-import webapi.api.filters as filters
-import webapi.api.models as models
 from data.csvdatads import CsvAnalysisDataSource
 from data.csvds import CsvDataSource
 from model.book import Book
-
+from webapi.api import filters, models
 from webapi.api.security import check_jwt
-from starlette.responses import JSONResponse
-from starlette.requests import Request
 
-
-description = """
+DESCRIPTION = """
 API de acesso a dados de livros, baseada em arquivo csv, originado em scraping.
 
 **Autores**:
@@ -30,11 +25,15 @@ train_csv_ds = CsvDataSource("mockdata/books_train.csv")
 test_csv_ds = CsvDataSource("mockdata/books_test.csv")
 csv_analysis_ds = CsvAnalysisDataSource("mockdata/books.csv")
 
-app = FastAPI(root_path="/api/v1", description=description)
+app = FastAPI(root_path="/api/v1", description=DESCRIPTION)
 
 
 @app.middleware("http")
 async def middleware(request: Request, call_next):
+    """
+    Middleware para autenticação JWT em endpoints protegidos.
+    Permite acesso não autenticado aos endpoints de auth, docs e openapi.
+    """
     print(request.url.path)
 
     if (
@@ -67,6 +66,9 @@ async def middleware(request: Request, call_next):
 async def all_books(
     filter_query: Annotated[filters.PageFilterParameters, Query()],
 ) -> models.ListReturn:
+    """
+    Retorna uma lista paginada de todos os livros.
+    """
     r = csv_ds.get_all_books(page=filter_query.page)
     return models.ListReturn(data=r, length=len(r))
 
@@ -75,6 +77,9 @@ async def all_books(
 async def top_rated_books(
     filter_query: Annotated[filters.ItemQtyFilterParameters, Query()],
 ) -> List[Book]:
+    """
+    Retorna uma lista dos livros mais bem avaliados, limitada pela quantidade especificada.
+    """
     books_ids = csv_analysis_ds.books_best_rated(filter_query.limit)
     if books_ids is None:
         return []
@@ -86,6 +91,9 @@ async def top_rated_books(
 async def books_by_price_range(
     filter_query: Annotated[filters.BookPriceRangeParameters, Query()],
 ) -> List[Book]:
+    """
+    Retorna uma lista de livros filtrados por faixa de preço e quantidade.
+    """
     books_ids = csv_analysis_ds.books_filtered_by_price(
         min=filter_query.min, max=filter_query.max, qty=filter_query.limit
     )
@@ -100,6 +108,9 @@ async def books_by_price_range(
 async def search_book(
     filter_query: Annotated[filters.BookFilterParameters, Query()],
 ) -> models.ListReturn:
+    """
+    Busca livros por título ou categoria com paginação.
+    """
     if filter_query.title == "" and filter_query.category == "":
         raise HTTPException(status_code=400)
     r = csv_ds.search(
@@ -110,6 +121,10 @@ async def search_book(
 
 @app.get("/books/{book_id}", description="Busca um livro dado um id")
 async def book(book_id: str) -> Book:
+    """
+    Retorna um livro pelo seu ID.
+    Ou HTTP 404 se não encontrado.
+    """
     r = csv_ds.get_book(book_id)
     if r is None:
         raise HTTPException(status_code=404)
@@ -118,12 +133,18 @@ async def book(book_id: str) -> Book:
 
 @app.get("/categories/", description="Lista de categorias")
 async def all_categories() -> dict:
+    """
+    Retorna uma lista de todas as categorias de livros.
+    """
     cx = csv_ds.get_all_categories()
     return {"data": cx}
 
 
 @app.get("/health/", description="Teste de endpoint")
 async def health() -> models.HealthReturn:
+    """
+    Endpoint de verificação de saúde da API e da fonte de dados.
+    """
     return models.HealthReturn(
         status="ok", data_source="ok" if csv_ds.health() else "error"
     )
@@ -131,6 +152,9 @@ async def health() -> models.HealthReturn:
 
 @app.get("/stats/overview")
 async def overview() -> dict:
+    """
+    Retorna um panorama de estatísticas: total de livros, preço médio e distribuição de avaliações.
+    """
     locale.setlocale(locale.LC_MONETARY, "en_GB")
     preco_medio_formatado = locale.currency(
         csv_analysis_ds.prices_average(), grouping=True
@@ -144,6 +168,9 @@ async def overview() -> dict:
 
 @app.get("/stats/categories")
 async def categories_overview() -> dict:
+    """
+    Retorna estatísticas por categoria: quantidade de livros e dados de preços.
+    """
     r = {}
     book_count = csv_analysis_ds.categories_books_count()
     prices_data = csv_analysis_ds.categories_prices_data()
@@ -156,24 +183,36 @@ async def categories_overview() -> dict:
 
 @app.get("/ml/features")
 async def ml_features() -> models.ListReturn:
+    """
+    Retorna os features do conjunto de teste para machine learning.
+    """
     r = test_csv_ds.get_all_test_books()
     return models.ListReturn(data=r, length=len(r))
 
 @app.get("/ml/training-data")
 async def ml_training_data() -> models.ListReturn:
+    """
+    Retorna os dados do conjunto de treino para machine learning.
+    """
     r = train_csv_ds.get_all_train_books()
     return models.ListReturn(data=r, length=len(r))
 
 @app.post("/auth")
 async def auth(userlogin: models.Userlogin):
-    from api.security import check_password, emit_jwt
+    """
+    Autentica um usuário e retorna um token JWT se as credenciais forem válidas.
+    """
+    from webapi.api.security import emit_jwt
 
     try:
         j = emit_jwt(userlogin.username, userlogin.password)
         return j
-    except Exception as e:
+    except Exception:
         raise HTTPException(status_code=401)
 
 
 def get_app():
+    """
+    Retorna a instância da aplicação FastAPI.
+    """
     return app

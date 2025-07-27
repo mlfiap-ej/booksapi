@@ -5,8 +5,6 @@ from decimal import Decimal
 @dataclass
 class Book:
     id: str
-    author: str
-    year: int
     title: str
     category: str
     stock: int
@@ -14,10 +12,8 @@ class Book:
     rating: int
     image: str
 
-    def __init__(self,id: str,author: str,year: int,title: str,category: str,stock: int,price: Decimal | float,rating: int,image: str = ""):
-        self.id = id
-        self.author = author
-        self.year = year
+    def __init__(self, id_: str, title: str, category: str, stock: int, price: Decimal | float, rating: int, image: str = ""):
+        self.id = id_
         self.title = title
         self.category = category
         self.stock = stock

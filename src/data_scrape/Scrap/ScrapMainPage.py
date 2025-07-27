@@ -1,4 +1,4 @@
-from Scrap.Scrap import Scrap
+from data_scrape.Scrap.Scrap import Scrap
 from bs4 import BeautifulSoup, Tag
 
 class ScrapMainPage(Scrap):
