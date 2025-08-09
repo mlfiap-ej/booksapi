@@ -84,6 +84,7 @@ class CsvDataSource:
     def search(self, page: int = 1, **kwargs) -> List[Book]
     def get_all_categories(self) -> List[str]
     def health(self) -> bool
+    def set_rating_for_category_price(self, category: str, price: float, rating: int) -> int
 ```
 - **Propósito**: Gerencia acesso aos dados do CSV usando DuckDB
 - **Funcionalidades**:
@@ -174,6 +175,13 @@ class BookModel(Base):
 @app.get("/health/")                  # Status do sistema
 @app.get("/stats/overview")           # Estatísticas gerais
 @app.get("/stats/categories")         # Estatísticas por categoria
+
+# Endpoints de ML:
+@app.get("/ml/features")              # Dataset de features (books_test)
+@app.get("/ml/training-data")         # Dataset de treino (books_train)
+@app.get("/ml/predictions")           # Predição de rating por categoria e preço
+
+# Endpoints auth Info
 @app.post("/auth")                    # Autenticação JWT
 ```
 
@@ -197,6 +205,12 @@ class ListReturn:      # Resposta paginada
 class Userlogin:       # Dados de login
 @dataclass
 class HealthReturn:    # Status do sistema
+@dataclass
+class PredictionReturn:  # Resposta de predição de rating
+    status: str
+    category: str
+    price: float
+    rating: int
 ```
 
 #### `filters.py`
@@ -205,6 +219,7 @@ class BookFilterParameters:        # Filtros de busca
 class PageFilterParameters:        # Paginação
 class ItemQtyFilterParameters:     # Limite de itens
 class BookPriceRangeParameters:    # Faixa de preço
+class PredictRatingParameters:     # Parâmetros para predição de rating (categoria, preço)
 ```
 
 ## ⚙️ Configuração
@@ -289,6 +304,36 @@ Authorization: Bearer <seu_token_jwt>
 | GET | `/stats/categories` | Estatísticas por categoria |
 | GET | `/health/` | Status do sistema |
 
+### Endpoints de ML
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/ml/features` | Retorna o dataset de features (mock `books_test.csv`) |
+| GET | `/ml/training-data` | Retorna o dataset de treino (mock `books_train.csv`) |
+| GET | `/ml/predictions` | Prediz o rating para uma categoria e preço |
+
+Detalhes do endpoint de predição:
+
+```bash
+GET /api/v1/ml/predictions?category=<categoria>&price=<preco>
+Authorization: Bearer <seu_token_jwt>
+```
+
+Resposta:
+
+```json
+{
+  "status": "ok",
+  "category": "Fantasy",
+  "price": 12.5,
+  "rating": 7
+}
+```
+
+Observações:
+- O rating atualmente é gerado aleatoriamente (1..10) enquanto o modelo de ML não é integrado (TODO).
+- A requisição é registrada em `mockdata/ml_request.csv` pela função `set_rating_for_category_price`.
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -347,9 +392,9 @@ Este projeto é parte do curso FIAP de Machine Learning.
 	- [x] Endpoints Core
 	- [x] Endpoints de Insights
 	- [x] Doc Swagger
-- [] Realizar o deploy da aplicação em Heroku ou Vercel
-- [] Plano Arquitetural
+- [x] Realizar o deploy da aplicação em Heroku ou Vercel
+- [x] Plano Arquitetural
 - [] Vídeo de Apresentação (3-12 minutos)
 - [x] Opcional - Desafio 1: Sistema de Autenticação OK 
-- [] Opcional - Pipeline ML-Ready
+- [x] Opcional - Pipeline ML-Ready
 - [] Opcional - Monitoramento & Analytics

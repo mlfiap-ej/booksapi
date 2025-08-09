@@ -1,4 +1,6 @@
 import os
+import csv
+
 from typing import List
 
 from sqlalchemy import create_engine, select, text
@@ -94,3 +96,14 @@ class CsvDataSource:
                 Book(row.id, row.title, row.category, row.stock, row.price, row.rating, row.image)
             )
         return data_to_return
+
+    def set_rating_for_category_price(self, category: str, price: float, rating: int) -> int:
+        try:
+            with open("mockdata/ml_request.csv", "a") as file:
+              writer = csv.writer(file,quoting=csv.QUOTE_NONNUMERIC)
+              writer.writerow([1, category, price, rating])
+        except Exception as e:
+            print(f"Error saving ml request: {e}")
+            return 0
+
+        return 1

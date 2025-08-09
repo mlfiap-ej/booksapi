@@ -20,3 +20,10 @@ class HealthReturn:
 class Userlogin(BaseModel):
     username: str = ""
     password: str = ""
+
+@dataclass
+class PredictionReturn:
+    status: str
+    category: str
+    price: float
+    rating: int
