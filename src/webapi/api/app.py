@@ -1,4 +1,6 @@
 import locale
+import random
+
 from typing import Annotated, List
 
 from fastapi import FastAPI, HTTPException, Query
@@ -203,6 +205,20 @@ async def ml_training_data() -> models.ListReturn:
     """
     r = train_csv_ds.get_all_train_books()
     return models.ListReturn(data=r, length=len(r))
+
+@app.get("/ml/predictions")
+async def predictions(
+      filter_query: Annotated[filters.PredictRatingParameters, Query()],
+) -> models.PredictionReturn:
+    category = filter_query.category
+    price = filter_query.price
+
+		# TODO: Implement call ML prediction
+    new_rating = random.randint(1, 10)
+
+    r = csv_ds.set_rating_for_category_price(category, price, new_rating)
+    return models.PredictionReturn(status="ok", category=category, price=price, rating=new_rating)
+
 
 @app.post("/auth")
 async def auth(userlogin: models.Userlogin):

@@ -23,3 +23,8 @@ class BookPriceRangeParameters(BaseModel):
     max: int = sys.float_info.max
     min: int = 0
     limit: int = 0
+
+
+class PredictRatingParameters(BaseModel):
+    category: str = ""
+    price: float = 0
