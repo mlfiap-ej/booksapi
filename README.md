@@ -181,7 +181,7 @@ class BookModel(Base):
 @app.get("/ml/training-data")         # Dataset de treino (books_train)
 @app.get("/ml/predictions")           # Predição de rating por categoria e preço
 
-# Endpoints auth
+# Endpoints auth Info
 @app.post("/auth")                    # Autenticação JWT
 ```
 
