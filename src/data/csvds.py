@@ -99,12 +99,9 @@ class CsvDataSource:
 
     def set_rating_for_category_price(self, category: str, price: float, rating: int) -> int:
         try:
-            print("Saving ml request")
             with open("mockdata/ml_request.csv", "a") as file:
-              print("Saving ml request 1")
               writer = csv.writer(file,quoting=csv.QUOTE_NONNUMERIC)
               writer.writerow([1, category, price, rating])
-              print("Saving ml request 2")
         except Exception as e:
             print(f"Error saving ml request: {e}")
             return 0
