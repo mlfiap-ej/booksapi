@@ -1,4 +1,0 @@
-POST http://localhost:8000/v1/api/token
-Content-Type: application/json
-
-{"username": "n", "password": "p"}
