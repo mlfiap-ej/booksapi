@@ -1,8 +1,0 @@
-{
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "src/webapi/main.py"
-    }
-  ]
-}
