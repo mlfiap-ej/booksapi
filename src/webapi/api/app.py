@@ -36,12 +36,14 @@ async def middleware(request: Request, call_next):
     Middleware para autenticação JWT em endpoints protegidos.
     Permite acesso não autenticado aos endpoints de auth, docs e openapi.
     """
-    print(request.url.path)
+
+    base_path = '/api/v1'
 
     if (
-        request.url.path.startswith("/api/v1/auth")
+        request.url.path.startswith(f"{base_path}/auth")
         or request.url.path.startswith("/docs")
-        or request.url.path.startswith("/api/v1/openapi.json")
+        or request.url.path.startswith(f"{base_path}/openapi.json")
+        or request.url.path.startswith(f"{base_path}/health")
     ):
         response = await call_next(request)
         return response
