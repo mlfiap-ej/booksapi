@@ -1,4 +1,4 @@
-from src.webapi.api import app
+from .api import app
 
 apiapp = app.get_app()
 
