@@ -239,16 +239,11 @@ PAGE_SIZE=10
 - Poetry (gerenciador de dependências)
 - Poe (task runner para pyproject - https://poethepoet.natn.io/index.html)
 
-## 🚀 Instalação
+## 🚀 Instalação de ambiente para desenvolvimento local
 
-### Instalação em Produção
+### Instalação inicial
 ```bash
-poetry install
-```
-
-### Instalação em Desenvolvimento
-```bash
-poetry install -G dev
+poetry install --with dev
 ```
 
 ## 💻 Uso
@@ -373,14 +368,18 @@ fiap-ml/
 
 ## 🛠️ Tecnologias Utilizadas
 
+### Ferramentas
+- **Python >= 3.12**: Linguagem principal, para processos de dados e criação da API
+- **Poetry**: Gerenciamento de dependências
+
+## Bibliotecas
 - **FastAPI**: Framework web para API REST
 - **DuckDB**: Banco de dados analítico
 - **BeautifulSoup4**: Web scraping
 - **Pandas**: Análise de dados
 - **PyJWT**: Autenticação JWT
 - **SQLAlchemy**: ORM
-- **Poetry**: Gerenciamento de dependências
-- **Python 3.12+**: Linguagem principal
+
 
 ## 📝 Licença
 
@@ -394,7 +393,7 @@ Este projeto é parte do curso FIAP de Machine Learning.
 	- [x] Endpoints Core
 	- [x] Endpoints de Insights
 	- [x] Doc Swagger
-- [x] Realizar o deploy da aplicação em Heroku ou Vercel
+- [x] Realizar o deploy da aplicação em Fly.io
 - [x] Plano Arquitetural
 - [] Vídeo de Apresentação (3-12 minutos)
 - [x] Opcional - Desafio 1: Sistema de Autenticação OK 
