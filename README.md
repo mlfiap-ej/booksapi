@@ -31,6 +31,8 @@ O sistema é dividido em três camadas principais:
 2. **Camada de Dados**: Gerencia o acesso e análise dos dados armazenados
 3. **Camada de API**: Fornece endpoints REST para consulta dos dados
 
+![Desenho da Arquitetura](docs/Arquitetura_v0_2.png)
+
 ## 📚 Classes e Componentes
 
 ### 🕷️ Módulo de Scraping (`src/data_scrape/Scrap/`)
